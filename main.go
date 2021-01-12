@@ -29,12 +29,17 @@ type CircuitBreaker struct {
 }
 
 func NewCircuitBreaker() *CircuitBreaker {
+	// define a state machine
 	cb := &CircuitBreaker{
 		StateMachine: NewStateMachine(Close),
 	}
+	// CLOSE -> OPEN : failed count reached threshold
 	cb.AddHandler(Close, ReachFailedThreshold, cb.ReachFailedThreshold)
+	// OPEN -> HALF_CLOSE : timeout
 	cb.AddHandler(Open, Timeout, cb.Timeout)
+	// HALF_OPEN -> OPEN : failed again
 	cb.AddHandler(HalfOpen, FailedAgain, cb.FailedAgain)
+	// HALF_OPEN -> CLOSE : success
 	cb.AddHandler(HalfOpen, Success, cb.Success)
 	return cb
 }

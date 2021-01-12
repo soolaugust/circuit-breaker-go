@@ -12,7 +12,7 @@ func TestNewCircuitBreaker(t *testing.T) {
 	}
 	result = cb.Call(Timeout)
 	if result != HalfOpen {
-		t.Fatal("circuit breaker status should be HALF_OPEN")
+		t.Fatal("circuit breaker status should be HALF_OPEN\n")
 	}
 	result = cb.Call(FailedAgain)
 	if result != Open {
